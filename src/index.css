@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-deep-ink: #0A0D0B;
+    --color-forest-green: #102015;
+    --color-aged-cream: #E8DFC9;
+    --color-steel-blue: #526A78;
+    --color-warm-amber: #D8A84E;
+    --color-soft-sage: #7FA67A;
+    --color-signal-orange: #D65A32;
+
+    --color-bg-primary: #0A0D0B;
+    --color-bg-secondary: #121815;
+    --color-text-main: #E8DFC9;
+    --color-text-muted: #B8B09D;
+    --color-border-frame: #364954;
+  }
+
+  body {
+    background-color: #0A0D0B;
+    color: #E8DFC9;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Typography Layer 1: Retro Video Game Display (For titles, CTRL OS logo, splash, headers) */
+  .font-retro-game {
+    font-family: 'Press Start 2P', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .font-retro-display, h1.display, .title-retro {
+    font-family: 'Silkscreen', 'Press Start 2P', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  /* Typography Layer 2: Friendly System UI & Body (For readability, descriptions, menus, text) */
+  .font-system-ui, p, button, input, textarea, select {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Typography Layer 3: Technical Monospace (Reserved for Terminal, code, logs, diagnostics) */
+  .font-mono-tech, code, pre, .terminal-text {
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+  }
+}
+
+/* CRT Scanlines Overlay - Subtle and Nostalgic */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(10, 13, 11, 0) 50%, 
+    rgba(0, 0, 0, 0.28) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(82, 106, 120, 0.015),
+    rgba(216, 168, 78, 0.015),
+    rgba(127, 166, 122, 0.015)
+  );
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+
+/* CRT Screen Vignette & Curvature Glow */
+.crt-vignette {
+  box-shadow: inset 0 0 80px rgba(10, 13, 11, 0.75), inset 0 0 20px rgba(82, 106, 120, 0.25);
+  pointer-events: none;
+}
+
+/* Subtle Film Grain */
+.film-grain {
+  background-image: radial-gradient(rgba(232, 223, 201, 0.035) 1px, transparent 0);
+  background-size: 4px 4px;
+}
+
+/* Phosphor Glow effect */
+.phosphor-glow {
+  text-shadow: 0 0 4px rgba(232, 223, 201, 0.45);
+}
+
+.phosphor-glow-amber {
+  text-shadow: 0 0 6px rgba(216, 168, 78, 0.55);
+}
+
+.phosphor-glow-blue {
+  text-shadow: 0 0 6px rgba(82, 106, 120, 0.65);
+}
+
+.phosphor-glow-green {
+  text-shadow: 0 0 6px rgba(127, 166, 122, 0.55);
+}
+
+/* Retro Window Border and Bevels - Steel Blue and Aged Cream */
+.retro-window-border {
+  box-shadow: 
+    inset 1px 1px 0px #6E8796,
+    inset -1px -1px 0px #0A0D0B,
+    0 10px 30px rgba(0, 0, 0, 0.75);
+}
+
+.retro-bevel {
+  box-shadow: inset 1px 1px 0px #526A78, inset -1px -1px 0px #0A0D0B, 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.retro-bevel-inset {
+  box-shadow: inset 1px 1px 0px #0A0D0B, inset -1px -1px 0px #3E525E;
+}
+
+.retro-button {
+  box-shadow: inset 1px 1px 0px rgba(232, 223, 201, 0.22), inset -1px -1px 0px #0A0D0B;
+  transition: all 0.1s ease;
+}
+
+.retro-button:hover {
+  filter: brightness(1.08);
+}
+
+.retro-button:active {
+  box-shadow: inset 1px 1px 0px #0A0D0B, inset -1px -1px 0px rgba(232, 223, 201, 0.25);
+  transform: translate(1px, 1px);
+}
+
+/* Custom Retro Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0E1417;
+  border-left: 1px solid #233139;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2D3E47;
+  border: 1px solid #526A78;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #526A78;
+  border: 1px solid #E8DFC9;
+}
+
+/* Subtle CRT Flicker */
+@keyframes crt-flicker {
+  0% { opacity: 0.995; }
+  49% { opacity: 1; }
+  51% { opacity: 0.98; }
+  53% { opacity: 1; }
+  85% { opacity: 0.99; }
+  100% { opacity: 1; }
+}
+
+.animate-crt-flicker {
+  animation: crt-flicker 0.2s infinite;
+}
+
+/* Vintage Personal Computer Desktop Background Texture */
+.bg-desktop-subtle {
+  background-color: #0A0D0B;
+  background-image: 
+    radial-gradient(circle at 50% 45%, rgba(42, 60, 71, 0.35) 0%, rgba(10, 13, 11, 0.95) 85%),
+    linear-gradient(to right, rgba(82, 106, 120, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(82, 106, 120, 0.09) 1px, transparent 1px);
+  background-size: 100% 100%, 36px 36px, 36px 36px;
+}
