@@ -10,7 +10,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { sound } from '../../utils/audio';
-import { ProjectPreviewVideo } from '../ProjectPreviewVideo';
+import { ProjectPreviewImage } from '../ProjectPreviewImage';
 import { PROJECTS } from '../../data/portfolioData';
 import { ProjectItem } from '../../types';
 
@@ -326,7 +326,7 @@ export const ArcadeApp: React.FC<ArcadeAppProps> = ({ initialGameId }) => {
 
               {/* Real MP4 Project Video Component */}
               <div className="max-w-2xl mx-auto">
-                <ProjectPreviewVideo
+                <ProjectPreviewImage
                   project={selectedGame.projectItem}
                   showOpenButton={true}
                 />
@@ -458,7 +458,7 @@ export const ArcadeApp: React.FC<ArcadeAppProps> = ({ initialGameId }) => {
 
                   {/* Real MP4 Project Video Component right inside the launcher */}
                   <div className="max-w-md mx-auto my-3">
-                    <ProjectPreviewVideo
+                    <ProjectPreviewImage
                       project={activeGame.projectItem}
                       showOpenButton={false}
                     />

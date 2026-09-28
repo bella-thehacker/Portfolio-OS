@@ -14,7 +14,7 @@ import {
 import { PROJECTS } from '../../data/portfolioData';
 import { ProjectItem, AppID } from '../../types';
 import { sound } from '../../utils/audio';
-import { ProjectPreviewVideo } from '../ProjectPreviewVideo';
+import { ProjectPreviewImage } from '../ProjectPreviewImage';
 
 interface DevStudioAppProps {
   initialProjectId?: string;
@@ -293,7 +293,7 @@ export function validateTacticalMove(puzzle: ChessPuzzle, playerMove: Move): Puz
 
         {/* Project Video Preview Section */}
         <section className="mb-5 max-w-3xl">
-          <ProjectPreviewVideo
+          <ProjectPreviewImage
             project={currentProject}
             showOpenButton={true}
           />

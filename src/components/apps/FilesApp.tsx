@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,15 +10,14 @@ import {
   Play,
   FileText,
   Shield,
-  Gamepad2,
-  Cpu,
-  Layers,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
+
 import { FILE_SYSTEM, PROJECTS } from '../../data/portfolioData';
 import { FileItem, AppID } from '../../types';
 import { sound } from '../../utils/audio';
-import { ProjectPreviewVideo } from '../ProjectPreviewVideo';
+import { ProjectPreviewImage } from '../ProjectPreviewImage';
+
 import {
   RetroFolderIcon,
   RetroDevMonitorIcon,
@@ -33,6 +33,7 @@ interface FilesAppProps {
 export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
   // Start at C:\IVY
   const rootIvy = FILE_SYSTEM.children?.[0] || FILE_SYSTEM;
+
   const [currentFolder, setCurrentFolder] = useState<FileItem>(rootIvy);
   const [history, setHistory] = useState<FileItem[]>([]);
   const [forwardHistory, setForwardHistory] = useState<FileItem[]>([]);
@@ -42,7 +43,8 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
   // Navigate deeper into a folder
   const navigateTo = (folder: FileItem) => {
     sound.playClick(850);
-    setHistory(prev => [...prev, currentFolder]);
+
+    setHistory((prev) => [...prev, currentFolder]);
     setForwardHistory([]);
     setCurrentFolder(folder);
     setSelectedItem(null);
@@ -51,10 +53,13 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
   // Back button
   const navigateBack = () => {
     if (history.length === 0) return;
+
     sound.playClick(650);
+
     const prev = history[history.length - 1];
+
     setHistory(history.slice(0, -1));
-    setForwardHistory(fwd => [currentFolder, ...fwd]);
+    setForwardHistory((fwd) => [currentFolder, ...fwd]);
     setCurrentFolder(prev);
     setSelectedItem(null);
   };
@@ -62,19 +67,29 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
   // Forward button
   const navigateForward = () => {
     if (forwardHistory.length === 0) return;
+
     sound.playClick(650);
+
     const next = forwardHistory[0];
+
     setForwardHistory(forwardHistory.slice(1));
-    setHistory(prev => [...prev, currentFolder]);
+    setHistory((prev) => [...prev, currentFolder]);
     setCurrentFolder(next);
     setSelectedItem(null);
   };
 
   // Up button (parent directory)
   const navigateUp = () => {
-    if (currentFolder.path === 'C:\\IVY' || currentFolder.path === 'C:\\') return;
+    if (
+      currentFolder.path === 'C:\\IVY' ||
+      currentFolder.path === 'C:\\'
+    ) {
+      return;
+    }
+
     sound.playClick(600);
-    setHistory(prev => [...prev, currentFolder]);
+
+    setHistory((prev) => [...prev, currentFolder]);
     setCurrentFolder(rootIvy);
     setSelectedItem(null);
   };
@@ -89,7 +104,11 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
       navigateTo(item);
     } else if (item.appId && onOpenFile) {
       sound.playWindowOpen();
-      onOpenFile(item.appId, item.projectId ? { projectId: item.projectId } : undefined);
+
+      onOpenFile(
+        item.appId,
+        item.projectId ? { projectId: item.projectId } : undefined
+      );
     } else if (item.content) {
       setShowProperties(true);
     }
@@ -99,15 +118,22 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
   const renderItemVisual = (item: FileItem) => {
     if (item.type === 'folder') {
       const folderName = item.name.toUpperCase();
+
       if (folderName.includes('GAMES')) {
         return <RetroArcadeIcon size={38} />;
       }
+
       if (folderName.includes('SECURITY')) {
         return <RetroSecurityShieldIcon size={38} />;
       }
-      if (folderName.includes('PROJECTS') || folderName.includes('CLIENT')) {
+
+      if (
+        folderName.includes('PROJECTS') ||
+        folderName.includes('CLIENT')
+      ) {
         return <RetroDevMonitorIcon size={38} />;
       }
+
       return <RetroFolderIcon size={38} />;
     }
 
@@ -119,6 +145,7 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
         </div>
       );
     }
+
     if (item.extension === 'SYS') {
       return (
         <div className="w-10 h-10 bg-[#141C20] border border-[#526A78] flex items-center justify-center text-[#7FA67A]">
@@ -126,6 +153,7 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
         </div>
       );
     }
+
     if (item.extension === 'DOC') {
       return <RetroResumeIcon size={36} />;
     }
@@ -153,12 +181,15 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
     if (name === 'STATIC_XO.EXE') return 'Static XO';
     if (name === 'LIFELINE.SYS') return 'Lifeline Hospital Management';
     if (name === 'DRIVE_NOBLE.EXE') return 'Drive Noble';
-    return name.replace(/_/g, ' ').replace(/\.(EXE|SYS|DLL|DOC|TXT|LOG|CFG)$/i, '');
+
+    return name
+      .replace(/_/g, ' ')
+      .replace(/\.(EXE|SYS|DLL|DOC|TXT|LOG|CFG)$/i, '');
   };
 
   // Selected project info if applicable
   const selectedProject = selectedItem?.projectId
-    ? PROJECTS.find(p => p.id === selectedItem.projectId)
+    ? PROJECTS.find((p) => p.id === selectedItem.projectId)
     : null;
 
   return (
@@ -171,7 +202,9 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
             onClick={navigateBack}
             disabled={history.length === 0}
             className={`p-1.5 border border-[#526A78] bg-[#1A242A] text-[#E8DFC9] retro-button ${
-              history.length === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:border-[#D8A84E] cursor-pointer'
+              history.length === 0
+                ? 'opacity-30 cursor-not-allowed'
+                : 'hover:border-[#D8A84E] cursor-pointer'
             }`}
             title="Back"
           >
@@ -182,7 +215,9 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
             onClick={navigateForward}
             disabled={forwardHistory.length === 0}
             className={`p-1.5 border border-[#526A78] bg-[#1A242A] text-[#E8DFC9] retro-button ${
-              forwardHistory.length === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:border-[#D8A84E] cursor-pointer'
+              forwardHistory.length === 0
+                ? 'opacity-30 cursor-not-allowed'
+                : 'hover:border-[#D8A84E] cursor-pointer'
             }`}
             title="Forward"
           >
@@ -193,9 +228,11 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
             onClick={navigateUp}
             disabled={currentFolder.path === 'C:\\IVY'}
             className={`p-1.5 border border-[#526A78] bg-[#1A242A] text-[#E8DFC9] retro-button ${
-              currentFolder.path === 'C:\\IVY' ? 'opacity-30 cursor-not-allowed' : 'hover:border-[#D8A84E] cursor-pointer'
+              currentFolder.path === 'C:\\IVY'
+                ? 'opacity-30 cursor-not-allowed'
+                : 'hover:border-[#D8A84E] cursor-pointer'
             }`}
-            title="Up to C:\Ivy"
+            title="Up to C:\IVY"
           >
             <ArrowUp size={13} />
           </button>
@@ -204,8 +241,12 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
         {/* Current Folder Path */}
         <div className="flex-1 flex items-center gap-2 px-2.5 py-1 bg-[#10171B] border border-[#2B3B44] retro-bevel-inset text-[#E8DFC9] truncate font-mono-tech text-xs">
           <HardDrive size={13} className="text-[#D8A84E] shrink-0" />
-          <span className="text-[#D8A84E]">PATH:</span>
-          <span className="truncate">{currentFolder.path}\</span>
+
+          <span className="text-[#D8A84E]">PATH:\</span>
+
+          <span className="truncate">
+            {currentFolder.path}\
+          </span>
         </div>
 
         {/* Properties / Info Toggle */}
@@ -223,12 +264,12 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
         </button>
       </div>
 
-      {/* Explorer Body: Split into File Grid & Info Inspector */}
+      {/* Explorer Body */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Main Folder Grid View */}
         <div className="flex-1 p-5 overflow-y-auto">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {currentFolder.children?.map(item => {
+            {currentFolder.children?.map((item) => {
               const isSelected = selectedItem?.id === item.id;
               const friendlyName = getFriendlyName(item.name);
 
@@ -263,46 +304,68 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
             })}
           </div>
 
-          {(!currentFolder.children || currentFolder.children.length === 0) && (
+          {(!currentFolder.children ||
+            currentFolder.children.length === 0) && (
             <div className="h-full flex flex-col items-center justify-center text-[#526A78] p-8 text-center">
-              <FolderIcon size={36} className="text-[#2B3B44] mb-2" />
-              <p className="text-sm font-medium">This folder is empty.</p>
+              <FolderIcon
+                size={36}
+                className="text-[#2B3B44] mb-2"
+              />
+
+              <p className="text-sm font-medium">
+                This folder is empty.
+              </p>
             </div>
           )}
         </div>
 
-        {/* Properties / Technical Metadata Panel (The "Machine Layer") */}
+        {/* Properties / Technical Metadata Panel */}
         {(showProperties || selectedItem) && (
           <aside className="w-full md:w-80 bg-[#10171B] border-t md:border-t-0 md:border-l border-[#2B3B44] p-4 flex flex-col justify-between overflow-y-auto">
             <div>
               <div className="flex items-center justify-between border-b border-[#2B3B44] pb-2 mb-3">
                 <span className="font-bold text-xs text-[#D8A84E] flex items-center gap-1.5 font-retro-display">
                   <Info size={13} />
-                  {selectedItem ? 'Item Properties' : 'Folder Info'}
+
+                  {selectedItem
+                    ? 'Item Properties'
+                    : 'Folder Info'}
                 </span>
+
                 <span className="text-[10px] font-mono-tech text-[#526A78]">
-                  {selectedItem ? selectedItem.type.toUpperCase() : 'DIR'}
+                  {selectedItem
+                    ? selectedItem.type.toUpperCase()
+                    : 'DIR'}
                 </span>
               </div>
 
               {selectedItem ? (
                 <div className="space-y-2.5">
                   <div>
-                    <span className="text-[10px] font-mono-tech text-[#526A78] block">DISPLAY NAME</span>
+                    <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                      DISPLAY NAME
+                    </span>
+
                     <span className="font-semibold text-sm text-[#E8DFC9] block">
                       {getFriendlyName(selectedItem.name)}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono-tech text-[#526A78] block">MACHINE FILENAME</span>
+                    <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                      MACHINE FILENAME
+                    </span>
+
                     <span className="text-xs font-mono-tech text-[#D8A84E] block">
                       {selectedItem.name}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono-tech text-[#526A78] block">LOCATION</span>
+                    <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                      LOCATION
+                    </span>
+
                     <span className="text-xs font-mono-tech text-[#B8B09D] break-all block">
                       {selectedItem.path}
                     </span>
@@ -310,13 +373,20 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
 
                   <div className="grid grid-cols-2 gap-2 pt-1">
                     <div>
-                      <span className="text-[10px] font-mono-tech text-[#526A78] block">SIZE</span>
+                      <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                        SIZE
+                      </span>
+
                       <span className="text-xs font-mono-tech text-[#E8DFC9]">
                         {selectedItem.size || '4 KB (Catalog)'}
                       </span>
                     </div>
+
                     <div>
-                      <span className="text-[10px] font-mono-tech text-[#526A78] block">DATE</span>
+                      <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                        DATE
+                      </span>
+
                       <span className="text-xs font-mono-tech text-[#E8DFC9]">
                         {selectedItem.date}
                       </span>
@@ -328,10 +398,10 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
                       <span className="text-[10px] font-bold text-[#D8A84E] block uppercase">
                         {selectedProject.type}
                       </span>
-                      
-                      {/* Project Preview Video inside Files Inspector */}
+
+                      {/* Project GIF / Image Preview */}
                       <div className="my-2">
-                        <ProjectPreviewVideo
+                        <ProjectPreviewImage
                           project={selectedProject}
                           showOpenButton={false}
                         />
@@ -350,7 +420,14 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
                           onClick={() => sound.playClick(950)}
                           className="w-full py-1.5 bg-[#D8A84E] text-[#0A0D0B] hover:bg-[#E8DFC9] font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 retro-button shadow-xs cursor-pointer"
                         >
-                          <span>{selectedProject.buttonLabel || `OPEN ${selectedProject.name?.toUpperCase() || selectedProject.title.toUpperCase()}`}</span>
+                          <span>
+                            {selectedProject.buttonLabel ||
+                              `OPEN ${
+                                selectedProject.name?.toUpperCase() ||
+                                selectedProject.title.toUpperCase()
+                              }`}
+                          </span>
+
                           <ExternalLink size={12} />
                         </a>
                       )}
@@ -359,12 +436,17 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
                         onClick={() => {
                           if (selectedItem.appId && onOpenFile) {
                             sound.playWindowOpen();
-                            onOpenFile(selectedItem.appId, { projectId: selectedProject.id });
+
+                            onOpenFile(selectedItem.appId, {
+                              projectId: selectedProject.id,
+                            });
                           }
                         }}
                         className="w-full py-1 bg-[#1A242A] border border-[#526A78] text-[#E8DFC9] hover:border-[#D8A84E] font-medium text-xs retro-button cursor-pointer"
                       >
-                        {selectedItem.appId === 'arcade' ? '[ Launch in Arcade ]' : '[ Open in Dev Studio ]'}
+                        {selectedItem.appId === 'arcade'
+                          ? '[ Launch in Arcade ]'
+                          : '[ Open in Dev Studio ]'}
                       </button>
                     </div>
                   )}
@@ -378,19 +460,28 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
               ) : (
                 <div className="space-y-2 text-xs">
                   <div>
-                    <span className="text-[10px] font-mono-tech text-[#526A78] block">CURRENT FOLDER</span>
+                    <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                      CURRENT FOLDER
+                    </span>
+
                     <span className="font-semibold text-sm text-[#E8DFC9] block">
                       {getFriendlyName(currentFolder.name)}
                     </span>
                   </div>
+
                   <div>
-                    <span className="text-[10px] font-mono-tech text-[#526A78] block">OBJECT COUNT</span>
+                    <span className="text-[10px] font-mono-tech text-[#526A78] block">
+                      OBJECT COUNT
+                    </span>
+
                     <span className="font-mono-tech text-xs text-[#E8DFC9]">
                       {currentFolder.children?.length || 0} items
                     </span>
                   </div>
+
                   <p className="text-xs text-[#B8B09D] mt-2">
-                    Double-click any folder or application to explore Ivy's work.
+                    Double-click any folder or application to explore
+                    Ivy&apos;s work.
                   </p>
                 </div>
               )}
@@ -411,10 +502,15 @@ export const FilesApp: React.FC<FilesAppProps> = ({ onOpenFile }) => {
       {/* Explorer Footer */}
       <footer className="px-3 py-1.5 bg-[#10171B] border-t border-[#2B3B44] flex items-center justify-between text-[11px] font-mono-tech text-[#526A78]">
         <span>
-          {currentFolder.children ? `${currentFolder.children.length} item(s)` : '0 items'}
+          {currentFolder.children
+            ? `${currentFolder.children.length} item(s)`
+            : '0 items'}
         </span>
+
         <span className="text-[#B8B09D]">
-          {selectedItem ? `Selected: ${selectedItem.name}` : 'Double-click to open'}
+          {selectedItem
+            ? `Selected: ${selectedItem.name}`
+            : 'Double-click to open'}
         </span>
       </footer>
     </div>

@@ -64,23 +64,38 @@ export interface ProjectItem {
   name?: string;
   subtitle?: string;
   fileName: string;
-  category: 'Games' | 'Web Application' | 'Website' | 'Management System' | string;
+
+  category:
+    | 'Games'
+    | 'Web Application'
+    | 'Website'
+    | 'Management System'
+    | string;
+
   type: string;
+
   status: 'ACTIVE' | 'COMPLETED' | 'IN DEVELOPMENT';
+
   description: string;
+
   whatItIs?: string;
   whatIBuilt: string;
   whyIBuilt?: string;
+
   technologies: string[];
+
   challenges?: string;
   lessons?: string;
   architectureDetails?: string;
-  previewVideo?: string;
-  previewVideoAlt?: string;
+
+  // GIF / image preview
+  previewImage?: string;
+
   liveUrl?: string;
   buttonLabel?: string;
   demoUrl?: string;
   githubUrl?: string;
+
   previewData?: Record<string, any>;
 }
 
@@ -89,10 +104,14 @@ export interface SecurityArtifact {
   title: string;
   environment: string;
   type: string;
+
   status: 'COMPLETED' | 'ACTIVE' | 'IN PROGRESS';
+
   description: string;
+
   findings: string[];
   toolsUsed: string[];
+
   rawLogPreview?: string;
 }
 
@@ -100,7 +119,9 @@ export interface SecurityTimelineEvent {
   step: string;
   title: string;
   description: string;
+
   status: 'COMPLETED' | 'ACTIVE' | 'CONTINUING';
+
   tags: string[];
 }
 
@@ -108,13 +129,25 @@ export interface FileItem {
   id: string;
   name: string;
   path: string;
+
   type: 'folder' | 'file';
-  extension?: 'EXE' | 'SYS' | 'DLL' | 'TXT' | 'LOG' | 'CFG' | 'DOC';
+
+  extension?:
+    | 'EXE'
+    | 'SYS'
+    | 'DLL'
+    | 'TXT'
+    | 'LOG'
+    | 'CFG'
+    | 'DOC';
+
   format?: string;
   size?: string;
   date: string;
   content?: string;
+
   appId?: AppID;
   projectId?: string;
+
   children?: FileItem[];
 }
